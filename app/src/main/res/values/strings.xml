@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Emotion Station Compose</string>
+    <string name="app_name" translatable="false">Emotion Station Compose</string>
+    <string name="hello_world">Hello world!</string>
 </resources>
