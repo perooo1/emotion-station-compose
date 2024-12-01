@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name" translatable="false">Emotion Station Compose</string>
     <string name="hello_world">Hello world!</string>
+
+    <string name="authentication_train_img_content_descr">Train image</string>
+
+    <string name="authentication_sign_up_hero_label">Sign Up to Emotion Station</string>
+    <string name="authentication_sign_in_hero_label">Sign In to Emotion Station</string>
+
+    <string name="authentication_name_label">Name</string>
+    <string name="authentication_last_name_label">Last Name</string>
+    <string name="authentication_email_label">Email</string>
+    <string name="authentication_password_label">Password</string>
+
+    <string name="authentication_sign_up_as_therapist">Sign Up as therapist</string>
+    <string name="authentication_sign_up_here_button_label">Sign Up Here</string>
+    <string name="authentication_sign_in_here_button_label">Sign In Here</string>
+    <string name="authentication_sign_in_button_label">Sign In to Emotion Station</string>
+    <string name="authentication_sign_up_button_label">Sign Up</string>
+
+    <string name="authentication_already_have_an_account">Already have an account?</string>
+    <string name="authentication_dont_have_an_account">Don\'t have an account?</string>
 </resources>
