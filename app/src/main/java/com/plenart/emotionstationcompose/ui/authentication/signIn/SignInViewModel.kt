@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.plenart.emotionstationcompose.data.authentication.AuthenticationRepository
-import com.plenart.emotionstationcompose.ui.authentication.signIn.mapper.SignInMapper
 import com.plenart.emotionstationcompose.ui.components.AuthenticationLayoutUiState
 
 class SignInViewModel(
     private val authenticationRepository: AuthenticationRepository,
-    private val signInMapper: SignInMapper,
 ) : ViewModel() {
     var uiState by mutableStateOf(AuthenticationLayoutUiState())
         private set

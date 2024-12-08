@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.plenart.emotionstationcompose.R
@@ -99,6 +100,7 @@ fun AuthenticationLayout(
             leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "") },
             label = { Text(text = stringResource(R.string.authentication_password_label)) },
             value = uiState.password,
+            visualTransformation = PasswordVisualTransformation(),
             onValueChange = onPasswordChange,
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
