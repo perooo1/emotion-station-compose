@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -65,4 +66,7 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    //Nav-component
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }

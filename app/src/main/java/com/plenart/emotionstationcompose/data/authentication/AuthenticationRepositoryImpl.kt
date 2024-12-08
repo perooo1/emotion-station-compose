@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class AuthenticationRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
-) : IAuthenticationRepository {
+) : AuthenticationRepository {
     override suspend fun signUp(email: String, password: String) {
         TODO("Not yet implemented")
     }

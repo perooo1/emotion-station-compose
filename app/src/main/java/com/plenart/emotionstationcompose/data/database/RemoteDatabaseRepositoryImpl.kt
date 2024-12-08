@@ -4,7 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class RemoteDatabaseRepositoryImpl(
     private val firebaseDatabase: FirebaseFirestore
-) : IRemoteDatabaseRepository {
+) : RemoteDatabaseRepository {
     override fun getChildren(parentId: String?, specialistId: String?) {
         TODO("Not yet implemented")
     }
