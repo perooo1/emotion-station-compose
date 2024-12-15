@@ -4,4 +4,6 @@ import com.plenart.emotionstationcompose.ui.components.AuthenticationLayoutUiSta
 
 data class SignInScreenUiState(
     val authenticationLayoutUiState: AuthenticationLayoutUiState,
+    val isSignInSuccessful: Boolean = false,
+    val signInError: String? = null,
 )

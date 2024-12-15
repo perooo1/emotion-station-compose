@@ -15,12 +15,11 @@ fun SignInScreen(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         AuthenticationLayout(
-            uiState = viewModel.uiState,
+            uiState = viewModel.uiState.authenticationLayoutUiState,
             onNavigateToSignUp = onNavigateToSignUpScreen,
             onSignUpAction = {},
             onSignInAction = { viewModel.signIn() },
@@ -41,15 +40,15 @@ fun SignInScreen(
 @Preview(showBackground = true)
 @Composable
 fun SignInScreenPreview() {
-/*
-    SignInScreen(
-        onNavigateToSignUpScreen = {},
-        onSignInAction = {},
-        email = "",
-        onPasswordChange = {},
-        password = "",
-        onEmailChange = {},
-    )
-    */
+    /*
+        SignInScreen(
+            onNavigateToSignUpScreen = {},
+            onSignInAction = {},
+            email = "",
+            onPasswordChange = {},
+            password = "",
+            onEmailChange = {},
+        )
+        */
     //SignInScreen(onNavigateToSignUpScreen = {})
 }
