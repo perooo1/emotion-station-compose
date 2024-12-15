@@ -1,13 +1,12 @@
 package com.plenart.emotionstationcompose.ui.authentication.signIn
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plenart.emotionstationcompose.data.authentication.AuthenticationRepository
 import com.plenart.emotionstationcompose.ui.authentication.signIn.mapper.SignInMapper
 import com.plenart.emotionstationcompose.ui.components.AuthenticationLayoutUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SignInViewModel(
@@ -15,21 +14,25 @@ class SignInViewModel(
     private val signInMapper: SignInMapper,
 ) : ViewModel() {
 
+    /*
     var uiState by mutableStateOf(SignInScreenUiState(AuthenticationLayoutUiState()))
         private set
+*/
+    private val _state = MutableStateFlow(SignInScreenUiState(AuthenticationLayoutUiState()))
+    val state = _state.asStateFlow()
 
     fun onEmailChange(email: String) {
-        uiState = signInMapper.toSignInScreenUiState(
+        _state.value = signInMapper.toSignInScreenUiState(
             authenticationResult = null,
-            currentUiState = uiState,
+            currentUiState = _state.value,
             email = email,
         )
     }
 
     fun onPasswordChange(password: String) {
-        uiState = signInMapper.toSignInScreenUiState(
+        _state.value = signInMapper.toSignInScreenUiState(
             authenticationResult = null,
-            currentUiState = uiState,
+            currentUiState = _state.value,
             password = password,
         )
     }
@@ -37,16 +40,17 @@ class SignInViewModel(
     fun signIn() {
         viewModelScope.launch {
             val result = authenticationRepository.signIn(
-                uiState.authenticationLayoutUiState.email,
-                uiState.authenticationLayoutUiState.password
+                _state.value.authenticationLayoutUiState.email,
+                _state.value.authenticationLayoutUiState.password
             )
-            uiState = signInMapper.toSignInScreenUiState(
-                currentUiState = uiState,
+            _state.value = signInMapper.toSignInScreenUiState(
+                currentUiState = _state.value,
                 authenticationResult = result,
             )
         }
     }
 
+    //Temporary
     fun signOut() {
         viewModelScope.launch {
             authenticationRepository.signOut()
@@ -54,6 +58,6 @@ class SignInViewModel(
     }
 
     fun resetState() {
-        uiState = SignInScreenUiState(AuthenticationLayoutUiState())
+        _state.value = SignInScreenUiState(AuthenticationLayoutUiState())
     }
 }

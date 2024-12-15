@@ -3,15 +3,20 @@ package com.plenart.emotionstationcompose.ui.authentication.signIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.plenart.emotionstationcompose.ui.components.AuthenticationLayout
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel,
+    uiState: SignInScreenUiState,
     onNavigateToSignUpScreen: () -> Unit,
+    onSignInAction: () -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -19,20 +24,12 @@ fun SignInScreen(
         contentAlignment = Alignment.Center,
     ) {
         AuthenticationLayout(
-            uiState = viewModel.uiState.authenticationLayoutUiState,
+            uiState = uiState.authenticationLayoutUiState,
             onNavigateToSignUp = onNavigateToSignUpScreen,
-            onSignUpAction = {},
-            onSignInAction = { viewModel.signIn() },
-            onNavigateToSignIn = {},
-            onPasswordChange = {
-                viewModel.onPasswordChange(it)
-            },
-            onLastNameChange = {},
+            onSignInAction = onSignInAction,
+            onPasswordChange = onPasswordChange,
             isSignUp = false,
-            onNameChange = {},
-            onEmailChange = {
-                viewModel.onEmailChange(it)
-            },
+            onEmailChange = onEmailChange,
         )
     }
 }
@@ -40,15 +37,13 @@ fun SignInScreen(
 @Preview(showBackground = true)
 @Composable
 fun SignInScreenPreview() {
-    /*
-        SignInScreen(
-            onNavigateToSignUpScreen = {},
-            onSignInAction = {},
-            email = "",
-            onPasswordChange = {},
-            password = "",
-            onEmailChange = {},
-        )
-        */
-    //SignInScreen(onNavigateToSignUpScreen = {})
+    val viewModel = koinViewModel<SignInViewModel>()
+    val state = viewModel.state.collectAsState().value
+    SignInScreen(
+        uiState = state,
+        onNavigateToSignUpScreen = {},
+        onSignInAction = viewModel::signIn,
+        onPasswordChange = viewModel::onPasswordChange,
+        onEmailChange = viewModel::onEmailChange,
+    )
 }

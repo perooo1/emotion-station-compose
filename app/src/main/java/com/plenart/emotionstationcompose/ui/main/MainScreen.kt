@@ -6,11 +6,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.plenart.emotionstationcompose.navigation.HomeScreen
 import com.plenart.emotionstationcompose.navigation.SignInScreen
@@ -24,7 +23,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold { padding ->
         Surface(
@@ -37,14 +35,19 @@ fun MainScreen() {
             ) {
                 composable<SignInScreen> {
                     val viewModel = koinViewModel<SignInViewModel>()
-                    LaunchedEffect(key1 = viewModel.uiState.isSignInSuccessful) {
-                        if (viewModel.uiState.isSignInSuccessful) {
+                    val state = viewModel.state.collectAsState()
+
+                    LaunchedEffect(key1 = state.value.isSignInSuccessful) {
+                        if (state.value.isSignInSuccessful) {
                             navController.navigate(HomeScreen)
                             viewModel.resetState()
                         }
                     }
                     SignInScreen(
-                        viewModel = viewModel,
+                        uiState = state.value,
+                        onSignInAction = viewModel::signIn,
+                        onPasswordChange = viewModel::onPasswordChange,
+                        onEmailChange = viewModel::onEmailChange,
                         onNavigateToSignUpScreen = { navController.navigate(SignUpScreen) },
                     )
                 }
@@ -56,7 +59,7 @@ fun MainScreen() {
                     )
                 }
                 composable<HomeScreen> {
-                    val viewmodel = koinViewModel<SignInViewModel>()
+                    val viewmodel = koinViewModel<SignInViewModel>()    //Temporary
 
                     HomeScreen(
                         onSignOut = {

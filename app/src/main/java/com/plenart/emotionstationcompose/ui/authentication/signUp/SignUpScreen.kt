@@ -10,18 +10,18 @@ import com.plenart.emotionstationcompose.ui.components.AuthenticationLayout
 import com.plenart.emotionstationcompose.ui.components.AuthenticationLayoutUiState
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier, onNavigateToSignIn: () -> Unit) {
+fun SignUpScreen(
+    onNavigateToSignIn: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         AuthenticationLayout(
             uiState = AuthenticationLayoutUiState(),
             onNavigateToSignIn = onNavigateToSignIn,
             onSignUpAction = {},
-            onSignInAction = {},
-            onNavigateToSignUp = {},
             onPasswordChange = {},
             onLastNameChange = {},
             isSignUp = true,

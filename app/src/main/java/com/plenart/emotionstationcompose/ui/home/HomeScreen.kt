@@ -1,6 +1,7 @@
 package com.plenart.emotionstationcompose.ui.home
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -39,7 +40,9 @@ fun HomeScreen(
         Box(
             contentAlignment = Alignment.Center,
 
-            modifier = modifier.padding(paddingValues),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         ) {
             Text(text = "Home Screen Under Construction")
         }
