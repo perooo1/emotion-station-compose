@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_world">Pozdrav, svijete!</string>
+    <!--Navigation bar labels-->
+    <string name="navigation_bar_home_screen_therapist">Početna</string>
+    <string name="navigation_bar_home_screen_parent">Stanice</string>
+    <string name="navigation_bar_children_screen">Djeca</string>
+    <string name="navigation_bar_info_screen">Informacije</string>
 
     <string name="authentication_train_img_content_descr">Slika vlaka</string>
 

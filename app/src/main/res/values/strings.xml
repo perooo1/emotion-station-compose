@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name" translatable="false">Emotion Station Compose</string>
-    <string name="hello_world">Hello world!</string>
+
+    <!--Navigation bar labels-->
+    <string name="navigation_bar_home_screen_therapist">Home</string>
+    <string name="navigation_bar_home_screen_parent">Stations</string>
+    <string name="navigation_bar_children_screen">Children</string>
+    <string name="navigation_bar_info_screen">Info</string>
 
     <string name="authentication_train_img_content_descr">Train image</string>
 
