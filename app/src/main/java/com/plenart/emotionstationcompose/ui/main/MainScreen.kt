@@ -27,6 +27,7 @@ import com.plenart.emotionstationcompose.navigation.ESRoute
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInScreen
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInViewModel
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpScreen
+import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpViewModel
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreen
@@ -103,6 +104,8 @@ fun MainScreen() {
                 composable(ESRoute.SignUpScreen.route)
                 {
                     val authenticationRepository = koinInject<AuthenticationRepository>()
+                    val viewModel = koinViewModel<SignUpViewModel>()
+                    val state = viewModel.state.collectAsState()
 
                     LaunchedEffect(key1 = Unit) {
                         if (authenticationRepository.hasUser()) {
@@ -110,10 +113,22 @@ fun MainScreen() {
                         }
                     }
 
+                    LaunchedEffect(key1 = state.value.isSignUpSuccessful) {
+                        if (state.value.isSignUpSuccessful) {
+                            navController.navigate(ESRoute.HomeScreen.route)
+                            viewModel.resetState()
+                        }
+                    }
+
                     SignUpScreen(
-                        onNavigateToSignIn = {
-                            navController.navigate(ESRoute.SignInScreen.route)
-                        },
+                        uiState = state.value,
+                        onSignUpAction = viewModel::signUp,
+                        onPasswordChange = viewModel::onPasswordChange,
+                        onEmailChange = viewModel::onEmailChange,
+                        onNameChange = viewModel::onNameChange,
+                        onLastNameChange = viewModel::onLastNameChange,
+                        onSignUpAsTherapistChange = viewModel::onSignUpAsTherapistChange,
+                        onNavigateToSignIn = { navController.navigate(ESRoute.SignInScreen.route) },
                     )
                 }
                 composable(ESRoute.HomeScreen.route) {

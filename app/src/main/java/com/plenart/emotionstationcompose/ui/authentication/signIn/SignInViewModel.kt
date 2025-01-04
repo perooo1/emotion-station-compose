@@ -14,10 +14,6 @@ class SignInViewModel(
     private val signInMapper: SignInMapper,
 ) : ViewModel() {
 
-    /*
-    var uiState by mutableStateOf(SignInScreenUiState(AuthenticationLayoutUiState()))
-        private set
-*/
     private val _state = MutableStateFlow(SignInScreenUiState(AuthenticationLayoutUiState()))
     val state = _state.asStateFlow()
 

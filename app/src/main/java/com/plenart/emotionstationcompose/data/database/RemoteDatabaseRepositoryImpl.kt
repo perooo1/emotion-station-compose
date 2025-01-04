@@ -2,8 +2,10 @@ package com.plenart.emotionstationcompose.data.database
 
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.plenart.emotionstationcompose.model.Parent
 import com.plenart.emotionstationcompose.model.Specialist
+import com.plenart.emotionstationcompose.model.User
 import kotlinx.coroutines.tasks.await
 
 private const val FIRESTORE_COLLECTION_PARENTS = "Parents"
@@ -46,5 +48,24 @@ class RemoteDatabaseRepositoryImpl(
             e.printStackTrace()
             return null
         }
+    }
+
+    override suspend fun registerUserInDatabase(user: User) {
+        val collection =
+            if (user.isSpecialist) {
+                FIRESTORE_COLLECTION_SPECIALISTS
+            } else {
+                FIRESTORE_COLLECTION_PARENTS
+            }
+
+        try {
+            firestore.collection(collection)
+                .document(user.id)
+                .set(user, SetOptions.merge())
+                .await()
+        } catch (e: FirebaseException) {
+            e.printStackTrace()
+        }
+
     }
 }

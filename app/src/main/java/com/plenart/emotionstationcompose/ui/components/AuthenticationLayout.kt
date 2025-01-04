@@ -36,7 +36,7 @@ data class AuthenticationLayoutUiState(
     val password: String = "",
     val name: String = "",
     val lastName: String = "",
-    val signInAsTherapist: Boolean = false,
+    val signUpAsSpecialist: Boolean = false,
 )
 
 @Composable
@@ -121,7 +121,7 @@ fun AuthenticationLayout(
                     },
                     trailingContent = {
                         Switch(
-                            checked = uiState.signInAsTherapist,
+                            checked = uiState.signUpAsSpecialist,
                             onCheckedChange = onSignUpAsTherapistChange,
                         )
                     },

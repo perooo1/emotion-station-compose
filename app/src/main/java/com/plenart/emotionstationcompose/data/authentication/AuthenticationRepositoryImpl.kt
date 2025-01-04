@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.plenart.emotionstationcompose.data.database.RemoteDatabaseRepository
 import com.plenart.emotionstationcompose.model.AuthenticationResult
+import com.plenart.emotionstationcompose.model.Parent
+import com.plenart.emotionstationcompose.model.Specialist
 import com.plenart.emotionstationcompose.model.User
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -56,8 +58,67 @@ class AuthenticationRepositoryImpl(
         return firebaseAuth.currentUser != null
     }
 
-    override suspend fun signUp(email: String, password: String) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+    override suspend fun signUp(
+        email: String,
+        password: String,
+        name: String,
+        lastName: String,
+        signUpAsSpecialist: Boolean,
+    ): AuthenticationResult {
+        return try {
+            val authUser =
+                firebaseAuth.createUserWithEmailAndPassword(email, password).await().user
+
+            val createdUser: User
+
+            if (authUser != null) {
+                if (signUpAsSpecialist) {
+                    createdUser = Specialist(
+                        id = authUser.uid,
+                        isSpecialist = true,
+                        name = name,
+                        lastName = lastName,
+                        email = email,
+                        password = password
+                    )
+                    databaseRepository.registerUserInDatabase(createdUser)
+                    _currentUser.value = createdUser
+
+                    AuthenticationResult(
+                        data = createdUser,
+                        errorMessage = null,
+                    )
+                } else {
+                    createdUser = Parent(
+                        id = authUser.uid,
+                        isSpecialist = false,
+                        name = name,
+                        lastName = lastName,
+                        email = email,
+                        password = password,
+                    )
+                    databaseRepository.registerUserInDatabase(createdUser)
+                    _currentUser.value = createdUser
+
+                    AuthenticationResult(
+                        data = createdUser,
+                        errorMessage = null,
+                    )
+                }
+            } else{
+                AuthenticationResult(
+                    data = null,
+                    errorMessage = "Error creating user - auth repo",
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is CancellationException) throw e
+            AuthenticationResult(
+                data = null,
+                errorMessage = e.message,
+            )
+        }
     }
 
     override suspend fun signIn(email: String, password: String): AuthenticationResult {
