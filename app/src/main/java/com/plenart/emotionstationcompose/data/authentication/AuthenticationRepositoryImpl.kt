@@ -1,41 +1,58 @@
 package com.plenart.emotionstationcompose.data.authentication
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.plenart.emotionstationcompose.data.database.RemoteDatabaseRepository
 import com.plenart.emotionstationcompose.model.AuthenticationResult
 import com.plenart.emotionstationcompose.model.User
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class AuthenticationRepositoryImpl(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val databaseRepository: RemoteDatabaseRepository,
+    coroutineScope: CoroutineScope,
 ) : AuthenticationRepository {
-    override val currentUser: Flow<User?>
-        get() = callbackFlow {
 
-            val listener = FirebaseAuth.AuthStateListener { auth ->
-                this.trySend(
-                    auth.currentUser?.run {
-                        User(
-                            id = uid,
-                            email = email,
-                            name = displayName,
-                        )
-                    },
-                )
-            }
-            firebaseAuth.addAuthStateListener(listener)
-            awaitClose {
-                firebaseAuth.removeAuthStateListener(listener)
+    init {
+        firebaseAuth.addAuthStateListener { auth ->
+            coroutineScope.launch {
+                val mappedUser = mapUser(auth.currentUser)
+                _currentUser.value = mappedUser
             }
         }
+    }
 
-    override val currentUserId: String
-        get() = firebaseAuth.currentUser?.uid.orEmpty()
+    private val _currentUser = MutableStateFlow<User?>(null)
+    override val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
-    override fun hasUser(): Boolean {
+    override val currentUserId: String = firebaseAuth.currentUser?.uid.orEmpty()
+
+    private suspend fun mapUser(authenticatedUser: FirebaseUser?): User? {
+        var user: User? = null
+        try {
+            user = databaseRepository.getSpecialistFromDatabase(authenticatedUser?.uid ?: "")
+            if (user == null) {
+                user = databaseRepository.getParentFromDatabase(authenticatedUser?.uid ?: "")
+            }
+        } catch (e: Exception) {
+            Log.e("AuthenticationRepositoryImpl", "Error mapping user: ${e.message}")
+        }
+        return user
+    }
+
+    override suspend fun hasUser(): Boolean {
+        val currentUser = firebaseAuth.currentUser
+
+        if (currentUser != null && _currentUser.value == null) {
+            _currentUser.value = mapUser(currentUser) ?: User.EmptyUser
+        }
         return firebaseAuth.currentUser != null
     }
 
@@ -47,14 +64,11 @@ class AuthenticationRepositoryImpl(
         return try {
             val user = firebaseAuth.signInWithEmailAndPassword(email, password).await().user
 
+            val mappedUser = mapUser(user)
+            _currentUser.value = mappedUser
+
             AuthenticationResult(
-                data = user?.run {
-                    User(
-                        id = uid,
-                        email = email,
-                        name = displayName,
-                    )
-                },
+                data = mappedUser ?: User.EmptyUser,
                 errorMessage = null,
             )
         } catch (e: Exception) {
