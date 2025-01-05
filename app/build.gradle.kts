@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -56,14 +57,16 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
     //Firebase - auth, firestore
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-
     //Koin
     implementation (libs.koin.androidx.compose)
-
-
+    //Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    //Nav-component
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }
