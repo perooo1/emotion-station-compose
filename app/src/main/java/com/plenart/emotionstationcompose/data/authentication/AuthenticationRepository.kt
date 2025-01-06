@@ -2,10 +2,10 @@ package com.plenart.emotionstationcompose.data.authentication
 
 import com.plenart.emotionstationcompose.model.AuthenticationResult
 import com.plenart.emotionstationcompose.model.User
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface AuthenticationRepository {
-    val currentUser: Flow<User?>
+    val currentUser: StateFlow<User?>
     val currentUserId: String
     suspend fun hasUser(): Boolean
 

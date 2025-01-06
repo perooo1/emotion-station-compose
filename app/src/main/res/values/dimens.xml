@@ -3,4 +3,7 @@
     <dimen name="authentication_hero_image_size">150dp</dimen>
     <dimen name="switch_authentication_screen_button_width">80dp</dimen>
     <dimen name="text_field_corner_radius">16dp</dimen>
+    <dimen name="info_screen_hero_image_size">250dp</dimen>
+    <!--Text dimensions-->
+    <dimen name="info_screen_specialist_name_text_size">28sp</dimen>
 </resources>
