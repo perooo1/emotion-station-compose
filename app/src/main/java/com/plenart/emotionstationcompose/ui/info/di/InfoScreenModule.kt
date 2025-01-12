@@ -10,6 +10,7 @@ val infoScreenModule = module {
     viewModel {
         InfoScreenViewModel(
             authenticationRepository = get(),
+            databaseRepository = get(),
             infoScreenMapper = get(),
         )
     }

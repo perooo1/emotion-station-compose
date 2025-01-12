@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteDatabaseRepository {
     //Flows
-    suspend fun getSpecialistFlow(specialistId: String?) : Flow<QuerySnapshot>
+    suspend fun getSpecialistFlow(specialistId: String?) : Flow<Specialist?>
 
     suspend fun getParentFromDatabase(id: String): Parent?
     suspend fun getSpecialistFromDatabase(id: String): Specialist?

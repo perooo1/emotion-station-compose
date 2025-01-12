@@ -46,13 +46,6 @@ class SignInViewModel(
         }
     }
 
-    //Temporary
-    fun signOut() {
-        viewModelScope.launch {
-            authenticationRepository.signOut()
-        }
-    }
-
     fun resetState() {
         _state.value = SignInScreenUiState(AuthenticationLayoutUiState())
     }

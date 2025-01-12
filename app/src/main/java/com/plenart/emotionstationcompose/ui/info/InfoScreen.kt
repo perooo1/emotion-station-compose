@@ -3,8 +3,10 @@ package com.plenart.emotionstationcompose.ui.info
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -35,9 +37,9 @@ import com.plenart.emotionstationcompose.ui.theme.spacing
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoScreen(
-    //infoScreenUiState: InfoScreenUiState ,
-    //onFloatingButtonAction: () -> Unit,
-    //onSignOutAction: () -> Unit,
+    infoScreenUiState: InfoScreenUiState,
+    onFABAction: () -> Unit,
+    onSignOutAction: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -51,7 +53,7 @@ fun InfoScreen(
                                 contentDescription = ""
                             )
                         },
-                        onClick = { },
+                        onClick = onSignOutAction,
                     )
                 }
             )
@@ -59,12 +61,11 @@ fun InfoScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.Default.Edit, contentDescription = "") },
-                onClick = {},
+                onClick = onFABAction,
                 text = { Text("Edit info") },
             )
         },
     ) { paddingValues ->
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
@@ -83,8 +84,44 @@ fun InfoScreen(
             Text(
                 fontSize = 28.sp,
                 fontStyle = FontStyle.Italic,
-                text = "Specialist Lastname",
+                text = infoScreenUiState.specialistFullName
             )
+            Spacer(modifier = Modifier.padding(vertical = MaterialTheme.spacing.small))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Occupation")
+                Text(text = infoScreenUiState.occupation)
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Workplace ")
+                Text(text = infoScreenUiState.workplace)
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Business hours ")
+                Text(text = infoScreenUiState.businessHours)
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Phone number ")
+                Text(text = infoScreenUiState.phoneNumber)
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Addicional educaiton")
+                Text(text = infoScreenUiState.additionalEducation)
+            }
         }
     }
 }
@@ -92,5 +129,16 @@ fun InfoScreen(
 @Preview(showBackground = true)
 @Composable
 fun InfoScreenPreview() {
-    InfoScreen()
+    InfoScreen(
+        infoScreenUiState = InfoScreenUiState(
+            specialistFullName = "Name Lastbane",
+            occupation = "Occupation",
+            additionalEducation = "add edu",
+            workplace = "roap",
+            businessHours = "busi hours",
+            phoneNumber = "phone num",
+        ),
+        onFABAction = {},
+        onSignOutAction = {},
+    )
 }

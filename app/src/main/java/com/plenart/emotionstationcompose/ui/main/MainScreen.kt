@@ -31,6 +31,7 @@ import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpViewMode
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreen
+import com.plenart.emotionstationcompose.ui.info.InfoScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -132,20 +133,26 @@ fun MainScreen() {
                     )
                 }
                 composable(ESRoute.HomeScreen.route) {
-                    val viewmodel = koinViewModel<SignInViewModel>()    //Temporary
-
-                    HomeScreen(
-                        onSignOut = {
-                            viewmodel.signOut()
-                            navController.popBackStack()
-                        },
-                    )
+                    HomeScreen()
                 }
                 composable(ESRoute.ChildrenScreen.route) {
                     ChildrenScreen()
                 }
                 composable(ESRoute.InfoScreen.route) {
-                    InfoScreen()
+                    val viewModel = koinViewModel<InfoScreenViewModel>()
+                    val state = viewModel.uiState.collectAsState()
+                    InfoScreen(
+                        infoScreenUiState = state.value,
+                        onSignOutAction = {
+                            viewModel.signOut()
+                            navController.navigate(ESRoute.SignInScreen.route) {
+                                popUpTo(navController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onFABAction = {},
+                    )
                 }
             }
         }
