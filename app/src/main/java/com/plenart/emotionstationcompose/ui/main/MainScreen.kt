@@ -81,11 +81,18 @@ fun MainScreen() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = ESRoute.SignUpScreen.route,
+                startDestination = ESRoute.SignInScreen.route,
             ) {
                 composable(ESRoute.SignInScreen.route) {
+                    val authenticationRepository = koinInject<AuthenticationRepository>()
                     val viewModel = koinViewModel<SignInViewModel>()
                     val state = viewModel.state.collectAsState()
+
+                    LaunchedEffect(key1 = Unit) {
+                        if (authenticationRepository.hasUser()) {
+                            navController.navigate(ESRoute.HomeScreen.route)
+                        }
+                    }
 
                     LaunchedEffect(key1 = state.value.isSignInSuccessful) {
                         if (state.value.isSignInSuccessful) {
@@ -104,15 +111,8 @@ fun MainScreen() {
                 }
                 composable(ESRoute.SignUpScreen.route)
                 {
-                    val authenticationRepository = koinInject<AuthenticationRepository>()
                     val viewModel = koinViewModel<SignUpViewModel>()
                     val state = viewModel.state.collectAsState()
-
-                    LaunchedEffect(key1 = Unit) {
-                        if (authenticationRepository.hasUser()) {
-                            navController.navigate(ESRoute.HomeScreen.route)
-                        }
-                    }
 
                     LaunchedEffect(key1 = state.value.isSignUpSuccessful) {
                         if (state.value.isSignUpSuccessful) {
