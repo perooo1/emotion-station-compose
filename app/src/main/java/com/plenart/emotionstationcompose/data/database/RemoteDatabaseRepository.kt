@@ -1,6 +1,5 @@
 package com.plenart.emotionstationcompose.data.database
 
-import com.google.firebase.firestore.QuerySnapshot
 import com.plenart.emotionstationcompose.model.Parent
 import com.plenart.emotionstationcompose.model.Specialist
 import com.plenart.emotionstationcompose.model.User

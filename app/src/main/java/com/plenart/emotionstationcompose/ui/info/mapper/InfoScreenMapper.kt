@@ -6,6 +6,7 @@ import com.plenart.emotionstationcompose.ui.info.InfoScreenUiState
 interface InfoScreenMapper {
     fun toInfoScreenUiState(
         currentUiState: InfoScreenUiState,
+        isCurrentUserSpecialist : Boolean,
         specialist: Specialist,
     ): InfoScreenUiState
 

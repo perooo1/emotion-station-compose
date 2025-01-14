@@ -13,17 +13,17 @@ import kotlinx.coroutines.tasks.await
 
 private const val FIRESTORE_COLLECTION_PARENTS = "Parents"
 private const val FIRESTORE_COLLECTION_SPECIALISTS = "Specialists"
+private const val USER_ID = "id"
 
 class RemoteDatabaseRepositoryImpl(
     private val firestore: FirebaseFirestore
 ) : RemoteDatabaseRepository {
     override suspend fun getSpecialistFlow(specialistId: String?): Flow<Specialist?> =
         firestore.collection(FIRESTORE_COLLECTION_SPECIALISTS)
-            .whereEqualTo("id", specialistId)
+            .whereEqualTo(USER_ID, specialistId)
             .snapshots().map {
                 it.documents.firstOrNull()?.toObject(Specialist::class.java)
             }
-
 
     override suspend fun getParentFromDatabase(id: String): Parent? {
         try {
@@ -31,7 +31,7 @@ class RemoteDatabaseRepositoryImpl(
             val snapshot =
                 firestore.collection(FIRESTORE_COLLECTION_PARENTS).document(id).get().await()
             if (snapshot.data != null) {
-                obj = snapshot.toObject(Parent::class.java)!!
+                obj = snapshot.toObject(Parent::class.java)
             }
             return obj
         } catch (e: FirebaseException) {
@@ -49,7 +49,7 @@ class RemoteDatabaseRepositoryImpl(
             val snapshot =
                 firestore.collection(FIRESTORE_COLLECTION_SPECIALISTS).document(id).get().await()
             if (snapshot.data != null) {
-                obj = snapshot.toObject(Specialist::class.java)!!
+                obj = snapshot.toObject(Specialist::class.java)
             }
             return obj
         } catch (e: FirebaseException) {
@@ -77,6 +77,5 @@ class RemoteDatabaseRepositoryImpl(
         } catch (e: FirebaseException) {
             e.printStackTrace()
         }
-
     }
 }

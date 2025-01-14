@@ -18,33 +18,46 @@ class InfoScreenViewModel(
 ) : ViewModel() {
     private val currentUser = authenticationRepository.currentUser.value
 
-    private val _specialistFlow = MutableStateFlow<Specialist?>(null)
-
     private val _uiState = MutableStateFlow(InfoScreenUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _isSpecialist = currentUser is Specialist
+
     init {
-        //Todo refacorat logiku da bude samo jedan update ui state-a, a ne ovako u svakom ifu
-        if (currentUser is Specialist) {
-            _specialistFlow.value = currentUser
-            _uiState.value = infoScreenMapper.toInfoScreenUiState(
-                currentUiState = _uiState.value,
-                specialist = currentUser
-            )
-        } else {
-            val korisnik = currentUser as Parent
-            if (korisnik.assignedSpecialistId == null) {
-                _uiState.value = infoScreenMapper.toUnassignedSpecialistUiState()
-            } else {
-                viewModelScope.launch {
-                    databaseRepository.getSpecialistFlow(korisnik.assignedSpecialistId).collect {
-                        _specialistFlow.value = it
-                        _uiState.value = infoScreenMapper.toInfoScreenUiState(
-                            currentUiState = _uiState.value,
-                            specialist = it!!
-                        )
+        when (currentUser) {
+            is Specialist -> {
+                val currentUiState = _uiState.value
+                _uiState.value = infoScreenMapper.toInfoScreenUiState(
+                    currentUiState = currentUiState,
+                    isCurrentUserSpecialist = _isSpecialist,
+                    specialist = currentUser,
+                )
+            }
+
+            is Parent -> {
+                if (currentUser.assignedSpecialistId == null) {
+                    _uiState.value = infoScreenMapper.toUnassignedSpecialistUiState()
+                } else {
+                    viewModelScope.launch {
+                        databaseRepository.getSpecialistFlow(currentUser.assignedSpecialistId)
+                            .collect { specialist ->
+                                specialist?.let {
+                                    _uiState.value = infoScreenMapper.toInfoScreenUiState(
+                                        currentUiState = uiState.value,
+                                        isCurrentUserSpecialist = _isSpecialist,
+                                        specialist = it,
+                                    )
+                                } ?: run {
+                                    _uiState.value =
+                                        infoScreenMapper.toUnassignedSpecialistUiState()
+                                }
+                            }
                     }
                 }
+            }
+
+            else -> {
+                _uiState.value = infoScreenMapper.toUnassignedSpecialistUiState()
             }
         }
     }

@@ -44,7 +44,16 @@ fun InfoScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("This is title ") },
+                title = {
+                    Text(
+                        stringResource(
+                            if (infoScreenUiState.isCurrentUserSpecialist)
+                                R.string.info_screen_title_specialist
+                            else
+                                R.string.info_screen_title_parent
+                        )
+                    )
+                },
                 actions = {
                     IconButton(
                         content = {
@@ -59,11 +68,13 @@ fun InfoScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Default.Edit, contentDescription = "") },
-                onClick = onFABAction,
-                text = { Text("Edit info") },
-            )
+            if (infoScreenUiState.isCurrentUserSpecialist) {
+                ExtendedFloatingActionButton(
+                    icon = { Icon(Icons.Default.Edit, contentDescription = "") },
+                    onClick = onFABAction,
+                    text = { Text(stringResource(R.string.info_screen_fab_text)) },
+                )
+            }
         },
     ) { paddingValues ->
         Column(
@@ -71,7 +82,7 @@ fun InfoScreen(
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
         ) {
             Image(
                 painter = painterResource(R.drawable.info_screen_hero),
@@ -84,43 +95,48 @@ fun InfoScreen(
             Text(
                 fontSize = 28.sp,
                 fontStyle = FontStyle.Italic,
-                text = infoScreenUiState.specialistFullName
+                text = infoScreenUiState.specialistFullName,
             )
             Spacer(modifier = Modifier.padding(vertical = MaterialTheme.spacing.small))
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                modifier = Modifier.fillMaxWidth(0.8f),
             ) {
-                Text(text = "Occupation")
-                Text(text = infoScreenUiState.occupation)
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Workplace ")
-                Text(text = infoScreenUiState.workplace)
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Business hours ")
-                Text(text = infoScreenUiState.businessHours)
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Phone number ")
-                Text(text = infoScreenUiState.phoneNumber)
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Addicional educaiton")
-                Text(text = infoScreenUiState.additionalEducation)
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "${stringResource(R.string.info_screen_occupation_label)}:")
+                    Text(text = infoScreenUiState.occupation)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "${stringResource(R.string.info_screen_workplace_label)}:")
+                    Text(text = infoScreenUiState.workplace)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "${stringResource(R.string.info_screen_business_hours_label)}:")
+                    Text(text = infoScreenUiState.businessHours)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "${stringResource(R.string.info_screen_phone_number_label)}:")
+                    Text(text = infoScreenUiState.phoneNumber)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "${stringResource(R.string.info_screen_additional_education_label)}:")
+                    Text(text = infoScreenUiState.additionalEducation)
+                }
             }
         }
     }
@@ -131,12 +147,13 @@ fun InfoScreen(
 fun InfoScreenPreview() {
     InfoScreen(
         infoScreenUiState = InfoScreenUiState(
-            specialistFullName = "Name Lastbane",
-            occupation = "Occupation",
             additionalEducation = "add edu",
-            workplace = "roap",
             businessHours = "busi hours",
+            isCurrentUserSpecialist = true,
+            occupation = "Occupation",
             phoneNumber = "phone num",
+            specialistFullName = "Name Lastbane",
+            workplace = "roap",
         ),
         onFABAction = {},
         onSignOutAction = {},
