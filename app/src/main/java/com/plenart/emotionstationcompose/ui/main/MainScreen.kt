@@ -31,6 +31,7 @@ import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpViewMode
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreen
+import com.plenart.emotionstationcompose.ui.info.InfoScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -80,11 +81,18 @@ fun MainScreen() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = ESRoute.SignUpScreen.route,
+                startDestination = ESRoute.SignInScreen.route,
             ) {
                 composable(ESRoute.SignInScreen.route) {
+                    val authenticationRepository = koinInject<AuthenticationRepository>()
                     val viewModel = koinViewModel<SignInViewModel>()
                     val state = viewModel.state.collectAsState()
+
+                    LaunchedEffect(key1 = Unit) {
+                        if (authenticationRepository.hasUser()) {
+                            navController.navigate(ESRoute.HomeScreen.route)
+                        }
+                    }
 
                     LaunchedEffect(key1 = state.value.isSignInSuccessful) {
                         if (state.value.isSignInSuccessful) {
@@ -103,15 +111,8 @@ fun MainScreen() {
                 }
                 composable(ESRoute.SignUpScreen.route)
                 {
-                    val authenticationRepository = koinInject<AuthenticationRepository>()
                     val viewModel = koinViewModel<SignUpViewModel>()
                     val state = viewModel.state.collectAsState()
-
-                    LaunchedEffect(key1 = Unit) {
-                        if (authenticationRepository.hasUser()) {
-                            navController.navigate(ESRoute.HomeScreen.route)
-                        }
-                    }
 
                     LaunchedEffect(key1 = state.value.isSignUpSuccessful) {
                         if (state.value.isSignUpSuccessful) {
@@ -132,20 +133,26 @@ fun MainScreen() {
                     )
                 }
                 composable(ESRoute.HomeScreen.route) {
-                    val viewmodel = koinViewModel<SignInViewModel>()    //Temporary
-
-                    HomeScreen(
-                        onSignOut = {
-                            viewmodel.signOut()
-                            navController.popBackStack()
-                        },
-                    )
+                    HomeScreen()
                 }
                 composable(ESRoute.ChildrenScreen.route) {
                     ChildrenScreen()
                 }
                 composable(ESRoute.InfoScreen.route) {
-                    InfoScreen()
+                    val viewModel = koinViewModel<InfoScreenViewModel>()
+                    val state = viewModel.uiState.collectAsState()
+                    InfoScreen(
+                        infoScreenUiState = state.value,
+                        onSignOutAction = {
+                            viewModel.signOut()
+                            navController.navigate(ESRoute.SignInScreen.route) {
+                                popUpTo(navController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onFABAction = {},
+                    )
                 }
             }
         }
