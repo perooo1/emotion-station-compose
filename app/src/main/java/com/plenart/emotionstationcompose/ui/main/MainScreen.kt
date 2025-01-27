@@ -29,6 +29,7 @@ import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInViewMode
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpScreen
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpViewModel
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
+import com.plenart.emotionstationcompose.ui.children.ChildrenScreenViewModel
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreenViewModel
@@ -136,7 +137,11 @@ fun MainScreen() {
                     HomeScreen()
                 }
                 composable(ESRoute.ChildrenScreen.route) {
-                    ChildrenScreen()
+                    val viewModel = koinViewModel<ChildrenScreenViewModel>()
+                    val state = viewModel.uiState.collectAsState()
+
+
+                    ChildrenScreen(uiState = state.value, onChildAction = {})
                 }
                 composable(ESRoute.InfoScreen.route) {
                     val viewModel = koinViewModel<InfoScreenViewModel>()

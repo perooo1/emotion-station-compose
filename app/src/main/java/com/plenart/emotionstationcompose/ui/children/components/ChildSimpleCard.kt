@@ -18,7 +18,7 @@ data class ChildSimpleCardUiState(
     val diagnosis: String,
     val fullName: String,
     val itemId: String,
-    val treatmentStart: LocalDate,
+    //val treatmentStart: LocalDate,
 )
 
 @Composable
@@ -41,7 +41,7 @@ fun ChildSimpleCard(
                 ) {
                     Text(text = uiState.age.toString())
                     Text(text = uiState.diagnosis)
-                    Text(text = uiState.treatmentStart.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                    //Text(text = uiState.treatmentStart.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 }
             }
         )
@@ -56,7 +56,7 @@ fun ChildSimpleCardPreview(modifier: Modifier = Modifier) {
         diagnosis = "Diagnosis",
         fullName = "Full Name",
         itemId = "Item Id",
-        treatmentStart = LocalDate.now()
+        //treatmentStart = LocalDate.now()
     )
 
     ChildSimpleCard(onCardAction = {}, uiState = uiState)

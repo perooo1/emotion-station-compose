@@ -1,16 +1,16 @@
 package com.plenart.emotionstationcompose.model
 
-import kotlinx.serialization.SerialName
+import com.google.firebase.firestore.PropertyName
 import kotlinx.serialization.Serializable
 
 @Serializable
 enum class EmotionForecast {
-    @SerialName("happy")
+    @PropertyName("happy")
     HAPPY,
 
-    @SerialName("sad")
+    @PropertyName("sad")
     SAD,
 
-    @SerialName("angry")
+    @PropertyName("angry")
     ANGRY,
 }

@@ -1,30 +1,28 @@
 package com.plenart.emotionstationcompose.model
 
 import com.google.firebase.firestore.PropertyName
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
 
 @Serializable
 data class Child(
     @PropertyName("id")
-    val id: String,
+    val id: String = "",
     @PropertyName("parentId")
-    val parentId: String,
+    val parentId: String = "",
     @PropertyName("assignedSpecialistId")
     val assignedSpecialistId: String? = null,
     @PropertyName("name")
-    val name: String,
+    val name: String = "",
     @PropertyName("lastName")
-    val lastName: String,
+    val lastName: String = "",
     @PropertyName("age")
-    val age: Int,
+    val age: Int? = null,
     @PropertyName("isGenderMale")
-    val isGenderMale: Boolean,
+    val isGenderMale: Boolean = true,
     @PropertyName("diagnosis")
-    val diagnosis: String,
+    val diagnosis: String = "",
     @PropertyName("emotionForecast")
-    val emotionForecast: Map<@Contextual LocalDate, EmotionForecast>? = null,
+    val emotionForecast: Map<String, EmotionForecast>? = null,
     @PropertyName("attendsKindergarten")
     val attendsKindergarten: Boolean = false,
     @PropertyName("riskyPregnancy")
@@ -32,7 +30,7 @@ data class Child(
     @PropertyName("pregnancyBirthWeek")
     val pregnancyBirthWeek: Int? = null,
     @PropertyName("treatmentStartMonth")
-    val treatmentStartMonth: @Contextual LocalDate? = null,
+    val treatmentStartMonth: String = "",
     @PropertyName("specialistNote")
     val specialistNote: String? = null
 ) {

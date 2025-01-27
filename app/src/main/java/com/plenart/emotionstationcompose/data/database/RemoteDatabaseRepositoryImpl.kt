@@ -4,6 +4,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.snapshots
+import com.plenart.emotionstationcompose.model.Child
 import com.plenart.emotionstationcompose.model.Parent
 import com.plenart.emotionstationcompose.model.Specialist
 import com.plenart.emotionstationcompose.model.User
@@ -13,7 +14,10 @@ import kotlinx.coroutines.tasks.await
 
 private const val FIRESTORE_COLLECTION_PARENTS = "Parents"
 private const val FIRESTORE_COLLECTION_SPECIALISTS = "Specialists"
+private const val FIRESTORE_COLLECTION_CHILDREN = "Children"
 private const val USER_ID = "id"
+private const val ASSIGNED_SPECIALIST_ID = "assignedSpecialistId"
+private const val PARENT_ID = "parentId"
 
 class RemoteDatabaseRepositoryImpl(
     private val firestore: FirebaseFirestore
@@ -24,6 +28,38 @@ class RemoteDatabaseRepositoryImpl(
             .snapshots().map {
                 it.documents.firstOrNull()?.toObject(Specialist::class.java)
             }
+
+    override suspend fun getChildrenFlow(
+        parentId: String?,
+        specialistId: String?,
+    ): Flow<List<Child>> {
+
+        val isSpecialist: Boolean = specialistId != null
+        if (parentId == null && !isSpecialist) {
+            throw IllegalArgumentException("Parent id or specialist id must be provided")
+        } else {
+            val a = if (isSpecialist) {
+                firestore.collection(FIRESTORE_COLLECTION_CHILDREN)
+                    .whereEqualTo(ASSIGNED_SPECIALIST_ID, specialistId)
+                    .snapshots().map {
+                        it.documents.mapNotNull { document ->
+                            document.toObject(Child::class.java)
+                        }
+                    }
+            } else {
+                firestore.collection(FIRESTORE_COLLECTION_CHILDREN)
+                    .whereEqualTo(PARENT_ID, parentId)
+                    .snapshots().map {
+                        it.documents.mapNotNull { document ->
+                            document.toObject(Child::class.java)
+                        }
+                    }
+            }
+            return a
+        }
+
+    }
+
 
     override suspend fun getParentFromDatabase(id: String): Parent? {
         try {
