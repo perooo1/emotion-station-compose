@@ -18,16 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.plenart.emotionstationcompose.data.authentication.AuthenticationRepository
+import com.plenart.emotionstationcompose.navigation.CHILD_ID_KEY
+import com.plenart.emotionstationcompose.navigation.ChildDetailsDestination
 import com.plenart.emotionstationcompose.navigation.ESRoute
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInScreen
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInViewModel
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpScreen
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpViewModel
+import com.plenart.emotionstationcompose.ui.childDetails.ChildDetailsScreen
+import com.plenart.emotionstationcompose.ui.childDetails.ChildDetailsViewModel
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreenViewModel
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
@@ -35,6 +41,7 @@ import com.plenart.emotionstationcompose.ui.info.InfoScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainScreen() {
@@ -139,9 +146,33 @@ fun MainScreen() {
                 composable(ESRoute.ChildrenScreen.route) {
                     val viewModel = koinViewModel<ChildrenScreenViewModel>()
                     val state = viewModel.uiState.collectAsState()
+                    ChildrenScreen(
+                        uiState = state.value,
+                        onChildAction = {
+                            navController.navigate(ChildDetailsDestination.createNavigationRoute(it))
+                        },
+                    )
+                }
+                composable(
+                    route = ChildDetailsDestination.route,
+                    arguments = listOf(
+                        navArgument(CHILD_ID_KEY) {
+                            type = NavType.StringType
+                        },
+                    )
+                ) {
+                    val childId = it.arguments?.getString(CHILD_ID_KEY)
+                    val viewModel = koinViewModel<ChildDetailsViewModel>(
+                        parameters = {
+                            parametersOf(childId)
+                        }
+                    )
+                    val uiState = viewModel.uiState.collectAsState().value
 
-
-                    ChildrenScreen(uiState = state.value, onChildAction = {})
+                    ChildDetailsScreen(
+                        onNavigateBack = navController::popBackStack,
+                        uiState = uiState,
+                    )
                 }
                 composable(ESRoute.InfoScreen.route) {
                     val viewModel = koinViewModel<InfoScreenViewModel>()

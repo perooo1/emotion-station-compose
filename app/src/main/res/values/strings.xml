@@ -35,4 +35,5 @@
     <string name="info_screen_business_hours_label">Business hours</string>
     <string name="info_screen_phone_number_label">Phone number</string>
     <string name="info_screen_additional_education_label">Additional education</string>
+    <string name="back_icon">Navigation back icon</string>
 </resources>

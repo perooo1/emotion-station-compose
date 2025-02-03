@@ -60,6 +60,13 @@ class RemoteDatabaseRepositoryImpl(
 
     }
 
+    override suspend fun getChildFlow(childId: String): Flow<Child> {
+        return firestore.collection(FIRESTORE_COLLECTION_CHILDREN).document(childId).snapshots()
+            .map {
+                it.toObject(Child::class.java)!!
+            }
+    }
+
 
     override suspend fun getParentFromDatabase(id: String): Parent? {
         try {

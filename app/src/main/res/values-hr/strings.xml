@@ -34,4 +34,7 @@
     <string name="info_screen_business_hours_label">Radno vrijeme</string>
     <string name="info_screen_phone_number_label">Broj telefona</string>
     <string name="info_screen_additional_education_label">Dodatne edukacije</string>
+
+    <string name="back_icon">Ikona za navigaciju unatrag</string>
+
 </resources>
