@@ -172,6 +172,8 @@ fun MainScreen() {
                     ChildDetailsScreen(
                         onNavigateBack = navController::popBackStack,
                         uiState = uiState,
+                        onPrimaryTabSelected = viewModel::onPrimaryTabSelected,
+                        onSecondaryTabSelected = viewModel::onSecondaryTabSelected,
                     )
                 }
                 composable(ESRoute.InfoScreen.route) {

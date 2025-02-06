@@ -6,6 +6,7 @@ import com.plenart.emotionstationcompose.data.database.RemoteDatabaseRepository
 import com.plenart.emotionstationcompose.ui.childDetails.mapper.ChildDetailsMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChildDetailsViewModel(
@@ -17,6 +18,18 @@ class ChildDetailsViewModel(
     private val _uiState = MutableStateFlow(ChildDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
+    fun onPrimaryTabSelected(index: Int) {
+        _uiState.update { currentState ->
+            mapper.onPrimaryTabSelected(currentState, index)
+        }
+    }
+
+    fun onSecondaryTabSelected(index: Int) {
+        _uiState.update { currentState ->
+            mapper.onSecondaryTabSelected(currentState, index)
+        }
+    }
+
     init {
         viewModelScope.launch {
             databaseRepository.getChildFlow(childId).collect { child ->
@@ -24,5 +37,4 @@ class ChildDetailsViewModel(
             }
         }
     }
-
 }

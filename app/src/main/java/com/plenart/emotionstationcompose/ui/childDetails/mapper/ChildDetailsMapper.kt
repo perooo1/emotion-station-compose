@@ -5,4 +5,6 @@ import com.plenart.emotionstationcompose.ui.childDetails.ChildDetailsUiState
 
 interface ChildDetailsMapper {
     fun toChildDetailsUiState(child: Child): ChildDetailsUiState
+    fun onPrimaryTabSelected(currentState: ChildDetailsUiState, selectedIndex: Int): ChildDetailsUiState
+    fun onSecondaryTabSelected(currentState: ChildDetailsUiState, selectedIndex: Int): ChildDetailsUiState
 }

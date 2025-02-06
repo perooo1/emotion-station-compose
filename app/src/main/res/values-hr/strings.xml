@@ -37,4 +37,14 @@
 
     <string name="back_icon">Ikona za navigaciju unatrag</string>
 
+    <!--Child details tab labels-->
+    <string name="child_info_tab_label">Informacije</string>
+    <string name="child_activities_tab_label">Aktivnosti</string>
+    <string name="child_overview_tab_label">Pregled</string>
+    <string name="child_completed_activities_tab_label">Završene aktivnosti</string>
+    <string name="recognition_tab_label">Prepoznavanje</string>
+    <string name="understanding_tab_label">Razumijevanje</string>
+    <string name="visual_understanding_tab_label">Visualno</string>
+    <string name="textual_understanding_tab_label">Textualno</string>
+
 </resources>
