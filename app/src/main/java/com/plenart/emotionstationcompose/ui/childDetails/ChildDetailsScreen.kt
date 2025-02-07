@@ -3,19 +3,27 @@ package com.plenart.emotionstationcompose.ui.childDetails
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import com.plenart.emotionstationcompose.R
+import com.plenart.emotionstationcompose.ui.childDetails.components.ActivitiesOverviewSecondaryTab
+import com.plenart.emotionstationcompose.ui.childDetails.components.ChildDetailsTab
+import com.plenart.emotionstationcompose.ui.childDetails.components.CompletedActivitiesSecondaryTab
 import com.plenart.emotionstationcompose.ui.components.BackIcon
+import org.koin.androidx.compose.koinViewModel
 
 //Todo add preview
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +44,15 @@ fun ChildDetailsScreen(
                 },
             )
         },
+        floatingActionButton = {
+            if(uiState.tabState.selectedPrimaryTabIndex == 0) {
+                ExtendedFloatingActionButton(
+                    icon = { Icon(Icons.Default.Edit, contentDescription = "") },
+                    onClick = { },
+                    text = { Text(stringResource(R.string.info_screen_fab_text)) },
+                )
+            }
+        }
     ) { paddingValues ->
 
         Column(modifier = modifier.padding(paddingValues)) {
@@ -58,15 +75,32 @@ fun ChildDetailsScreen(
                             selected = uiState.tabState.selectedSecondaryTabIndex == index,
                             onClick = { onSecondaryTabSelected(index) },
                             text = { Text(stringResource(tab.labelRes)) },
-                            )
+                        )
                     }
                 }
             }
+            when (uiState.tabState.selectedPrimaryTabIndex) {
+                0 -> ChildDetailsTab(child = uiState.child)
+                else -> when (uiState.tabState.selectedSecondaryTabIndex) {
+                    0 -> ActivitiesOverviewSecondaryTab()
+                    else -> CompletedActivitiesSecondaryTab()
+                }
+            }
 
-            Text(
-                text = "Selected: primary index ${uiState.tabState.selectedPrimaryTabIndex}, secondary index ${uiState.tabState.selectedSecondaryTabIndex}",
-                modifier = Modifier.padding(16.dp)
-            )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChildDetailsScreenPreview() {
+    val viewModel = koinViewModel<ChildDetailsViewModel>()
+    val state = viewModel.uiState.collectAsState().value
+
+    ChildDetailsScreen(
+        uiState = state,
+        onNavigateBack = {},
+        onPrimaryTabSelected = {},
+        onSecondaryTabSelected = {},
+    )
 }
