@@ -83,7 +83,12 @@ fun ChildDetailsScreen(
                 0 -> ChildDetailsTab(child = uiState.child)
                 else -> when (uiState.tabState.selectedSecondaryTabIndex) {
                     0 -> ActivitiesOverviewSecondaryTab()
-                    else -> CompletedActivitiesSecondaryTab()
+                    else -> CompletedActivitiesSecondaryTab(
+                        completedActivities = uiState.recordedActivities,
+                        onCompletedActivityAction = {
+
+                        }
+                    )
                 }
             }
 

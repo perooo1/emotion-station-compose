@@ -6,11 +6,13 @@ import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.plenart.emotionstationcompose.R
+import com.plenart.emotionstationcompose.model.ActivityRecord
 import com.plenart.emotionstationcompose.model.Child
 
 
 data class ChildDetailsUiState(
     val child: Child = Child(),
+    val recordedActivities: List<ActivityRecord> = emptyList(),
     val tabState: ChildDetailsTabState = ChildDetailsTabState(),
 )
 

@@ -68,5 +68,6 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     //Nav-component
     implementation(libs.navigation.compose)
+    //(De)Serialization
     implementation(libs.kotlinx.serialization.json)
 }

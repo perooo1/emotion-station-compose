@@ -15,6 +15,29 @@ class ChildDetailsViewModel(
     private val databaseRepository: RemoteDatabaseRepository,
 ) : ViewModel() {
 
+    init {
+        viewModelScope.launch {
+
+            databaseRepository.getChildFlow(childId).collect { child ->
+                _uiState.value = mapper.toChildDetailsUiState(
+                    _uiState.value,
+                    child,
+                    _uiState.value.recordedActivities,
+                )
+            }
+        }
+        viewModelScope.launch {
+            databaseRepository.getRecordedActivities(childId).collect { activities ->
+                _uiState.value =
+                    mapper.toChildDetailsUiState(
+                        _uiState.value,
+                        _uiState.value.child,
+                        activities,
+                    )
+            }
+        }
+    }
+
     private val _uiState = MutableStateFlow(ChildDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -27,14 +50,6 @@ class ChildDetailsViewModel(
     fun onSecondaryTabSelected(index: Int) {
         _uiState.update { currentState ->
             mapper.onSecondaryTabSelected(currentState, index)
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            databaseRepository.getChildFlow(childId).collect { child ->
-                _uiState.value = mapper.toChildDetailsUiState(child)
-            }
         }
     }
 }

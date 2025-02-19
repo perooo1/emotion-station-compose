@@ -4,6 +4,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.snapshots
+import com.plenart.emotionstationcompose.model.ActivityRecord
 import com.plenart.emotionstationcompose.model.Child
 import com.plenart.emotionstationcompose.model.Parent
 import com.plenart.emotionstationcompose.model.Specialist
@@ -12,12 +13,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
+private const val FIRESTORE_COLLECTION_ACTIVITY_RECORDS = "ActivityRecords"
 private const val FIRESTORE_COLLECTION_PARENTS = "Parents"
 private const val FIRESTORE_COLLECTION_SPECIALISTS = "Specialists"
 private const val FIRESTORE_COLLECTION_CHILDREN = "Children"
 private const val USER_ID = "id"
 private const val ASSIGNED_SPECIALIST_ID = "assignedSpecialistId"
 private const val PARENT_ID = "parentId"
+private const val CHILD_ID = "childId"
 
 class RemoteDatabaseRepositoryImpl(
     private val firestore: FirebaseFirestore
@@ -28,6 +31,15 @@ class RemoteDatabaseRepositoryImpl(
             .snapshots().map {
                 it.documents.firstOrNull()?.toObject(Specialist::class.java)
             }
+
+    override suspend fun getRecordedActivities(childId: String): Flow<List<ActivityRecord>> {
+        return firestore.collection(FIRESTORE_COLLECTION_ACTIVITY_RECORDS)
+            .whereEqualTo(CHILD_ID, childId).snapshots().map {
+            it.documents.mapNotNull { document ->
+                document.toObject(ActivityRecord::class.java)
+            }
+        }
+    }
 
     override suspend fun getChildrenFlow(
         parentId: String?,
