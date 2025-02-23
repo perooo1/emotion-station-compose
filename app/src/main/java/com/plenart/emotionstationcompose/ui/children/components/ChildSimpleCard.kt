@@ -10,15 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 data class ChildSimpleCardUiState(
     val age: Int,
     val diagnosis: String,
     val fullName: String,
     val itemId: String,
-    //val treatmentStart: LocalDate,
 )
 
 @Composable
@@ -41,7 +38,6 @@ fun ChildSimpleCard(
                 ) {
                     Text(text = uiState.age.toString())
                     Text(text = uiState.diagnosis)
-                    //Text(text = uiState.treatmentStart.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 }
             }
         )
@@ -56,7 +52,6 @@ fun ChildSimpleCardPreview(modifier: Modifier = Modifier) {
         diagnosis = "Diagnosis",
         fullName = "Full Name",
         itemId = "Item Id",
-        //treatmentStart = LocalDate.now()
     )
 
     ChildSimpleCard(onCardAction = {}, uiState = uiState)

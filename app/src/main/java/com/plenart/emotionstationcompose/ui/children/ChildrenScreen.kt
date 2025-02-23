@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.plenart.emotionstationcompose.R
 import com.plenart.emotionstationcompose.ui.children.components.ChildSimpleCard
 import org.koin.androidx.compose.koinViewModel
 
@@ -23,7 +25,7 @@ fun ChildrenScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Children screen") },
+                title = { Text(stringResource(R.string.children_screen_title)) },
             )
         },
     ) { paddingValues ->
@@ -31,7 +33,6 @@ fun ChildrenScreen(
             contentPadding = paddingValues,
             modifier = modifier,
         ) {
-
             items(
                 items = uiState.children,
                 key = {

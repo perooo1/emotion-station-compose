@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ChildrenScreenViewModel(
-    private val authenticationRepository: AuthenticationRepository,
+    authenticationRepository: AuthenticationRepository,
     private val childrenScreenMapper: ChildrenScreenMapper,
     private val databaseRepository: RemoteDatabaseRepository,
 ) : ViewModel() {

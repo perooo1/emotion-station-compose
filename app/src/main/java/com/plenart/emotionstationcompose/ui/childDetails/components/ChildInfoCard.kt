@@ -12,7 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.plenart.emotionstationcompose.R
 import com.plenart.emotionstationcompose.model.Child
 import com.plenart.emotionstationcompose.ui.childDetails.ChildDetailsViewModel
 import com.plenart.emotionstationcompose.ui.theme.localSpacing
@@ -24,8 +26,10 @@ fun ChildInfoCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer,),
-        modifier = modifier
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+        modifier = modifier,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(localSpacing.current.medium),
@@ -35,43 +39,43 @@ fun ChildInfoCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Diagnosis")
+                Text(stringResource(R.string.child_diagnosis))
                 Text(child.diagnosis)
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Child age ")
-                Text(child.age.toString() ?: "")
+                Text(stringResource(R.string.child_age))
+                Text(child.age.toString())
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Start of treatment")
+                Text(stringResource(R.string.child_treatment_start))
                 Text(child.treatmentStartMonth)
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Attends kindergarten?")
+                Text(stringResource(R.string.child_attends_kindergarten))
                 Text(child.attendsKindergarten.toString())
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Risky pregnancy?")
+                Text(stringResource(R.string.child_risky_pregnancy))
                 Text(child.riskyPregnancy.toString())
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Pregnancy birth week")
-                Text(child.pregnancyBirthWeek.toString() ?: "")
+                Text(stringResource(R.string.child_pregnancy_birth_week))
+                Text(child.pregnancyBirthWeek.toString())
             }
         }
 

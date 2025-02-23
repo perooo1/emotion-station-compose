@@ -45,12 +45,11 @@ class RemoteDatabaseRepositoryImpl(
         parentId: String?,
         specialistId: String?,
     ): Flow<List<Child>> {
-
         val isSpecialist: Boolean = specialistId != null
         if (parentId == null && !isSpecialist) {
             throw IllegalArgumentException("Parent id or specialist id must be provided")
         } else {
-            val a = if (isSpecialist) {
+            val children = if (isSpecialist) {
                 firestore.collection(FIRESTORE_COLLECTION_CHILDREN)
                     .whereEqualTo(ASSIGNED_SPECIALIST_ID, specialistId)
                     .snapshots().map {
@@ -67,9 +66,8 @@ class RemoteDatabaseRepositoryImpl(
                         }
                     }
             }
-            return a
+            return children
         }
-
     }
 
     override suspend fun getChildFlow(childId: String): Flow<Child> {

@@ -24,8 +24,7 @@ data class ChildDetailsTabState(
     val secondaryTabs: List<ESTab> = listOf(
         ESTab(R.string.child_overview_tab_label),
         ESTab(R.string.child_completed_activities_tab_label),
-
-        ),
+    ),
     val selectedPrimaryTabIndex: Int = 0,
     val selectedSecondaryTabIndex: Int = 0,
 )

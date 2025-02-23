@@ -38,6 +38,9 @@
 
     <string name="back_icon">Navigation back icon</string>
 
+    <!--Children screen-->
+    <string name="children_screen_title">Children screen</string>
+
     <!--Child details tab labels-->
     <string name="child_info_tab_label">Child info</string>
     <string name="child_activities_tab_label">Activities</string>
@@ -47,4 +50,12 @@
     <string name="understanding_tab_label">Understanding</string>
     <string name="visual_understanding_tab_label">Visual</string>
     <string name="textual_understanding_tab_label">Textual</string>
+
+    <!--Child Details screen-->
+    <string name="child_diagnosis">Diagnosis</string>
+    <string name="child_age">Child age</string>
+    <string name="child_treatment_start">Treatment start</string>
+    <string name="child_attends_kindergarten">Attends kindergarten</string>
+    <string name="child_risky_pregnancy">Risky pregnancy</string>
+    <string name="child_pregnancy_birth_week">Pregnancy birth week</string>
 </resources>

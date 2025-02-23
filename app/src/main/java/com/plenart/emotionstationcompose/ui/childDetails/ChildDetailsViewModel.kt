@@ -17,7 +17,6 @@ class ChildDetailsViewModel(
 
     init {
         viewModelScope.launch {
-
             databaseRepository.getChildFlow(childId).collect { child ->
                 _uiState.value = mapper.toChildDetailsUiState(
                     _uiState.value,

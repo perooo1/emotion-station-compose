@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.plenart.emotionstationcompose.model.ActivityRecord
-import com.plenart.emotionstationcompose.ui.children.components.ChildSimpleCard
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CompletedActivitiesSecondaryTab(
@@ -49,8 +49,7 @@ fun CompletedActivitiesSecondaryTab(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(text = it.timeOfActivity)
-                                //Text(text = uiState.treatmentStart.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))) TODO
+                                Text(text = it.timeOfActivity.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                             }
                         }
                     )

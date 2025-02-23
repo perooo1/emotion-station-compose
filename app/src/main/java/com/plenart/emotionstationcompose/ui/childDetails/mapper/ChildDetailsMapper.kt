@@ -11,7 +11,6 @@ interface ChildDetailsMapper {
         recordedActivities: List<ActivityRecord>,
     ): ChildDetailsUiState
 
-    //fun toChildDetailsUiState(child: Child): ChildDetailsUiState
     fun onPrimaryTabSelected(
         currentState: ChildDetailsUiState,
         selectedIndex: Int

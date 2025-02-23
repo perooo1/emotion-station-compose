@@ -40,7 +40,7 @@ fun ChildDetailsScreen(
             CenterAlignedTopAppBar(
                 navigationIcon = { BackIcon(onBackClicked = onNavigateBack) },
                 title = {
-                    Text("Details")
+                    Text(uiState.child.fullName)
                 },
             )
         },

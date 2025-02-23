@@ -37,6 +37,9 @@
 
     <string name="back_icon">Ikona za navigaciju unatrag</string>
 
+    <!--Children screen-->
+    <string name="children_screen_title">Djeca</string>
+
     <!--Child details tab labels-->
     <string name="child_info_tab_label">Informacije</string>
     <string name="child_activities_tab_label">Aktivnosti</string>
@@ -47,4 +50,11 @@
     <string name="visual_understanding_tab_label">Visualno</string>
     <string name="textual_understanding_tab_label">Textualno</string>
 
+    <!--Child Details screen-->
+    <string name="child_diagnosis">Dijagnoza</string>
+    <string name="child_age">Dob djeteta</string>
+    <string name="child_treatment_start">Početak terapije</string>
+    <string name="child_attends_kindergarten">Pohađa vrtić</string>
+    <string name="child_risky_pregnancy">Rizična trudnoća</string>
+    <string name="child_pregnancy_birth_week">Tjedan trudnoće u kojem je dijete rođeno</string>
 </resources>
