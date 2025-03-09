@@ -8,6 +8,7 @@ import com.plenart.emotionstationcompose.ui.authentication.signIn.di.signInModul
 import com.plenart.emotionstationcompose.ui.authentication.signUp.di.signUpModule
 import com.plenart.emotionstationcompose.ui.childDetails.di.childDetailsModule
 import com.plenart.emotionstationcompose.ui.children.di.childrenScreenModule
+import com.plenart.emotionstationcompose.ui.home.di.homeScreenModule
 import com.plenart.emotionstationcompose.ui.info.di.infoScreenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -25,6 +26,7 @@ class EmotionStationComposeApp : Application() {
                 childDetailsModule,
                 childrenScreenModule,
                 databaseModule,
+                homeScreenModule,
                 infoScreenModule,
                 signInModule,
                 signUpModule,

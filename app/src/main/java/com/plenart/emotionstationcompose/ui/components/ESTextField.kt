@@ -21,8 +21,8 @@ fun ESTextField(
     label: String,
     onValueChange: (String) -> Unit,
     value: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
     modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     OutlinedTextField(
         label = { Text(text = label) },

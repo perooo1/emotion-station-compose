@@ -1,44 +1,77 @@
 package com.plenart.emotionstationcompose.ui.home
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.plenart.emotionstationcompose.ui.children.ChildrenScreenViewModel
+import com.plenart.emotionstationcompose.ui.home.components.ChildDropdown
+import com.plenart.emotionstationcompose.ui.home.components.ChildDropdownUiState
+import com.plenart.emotionstationcompose.ui.home.components.EmotionStationCard
+import com.plenart.emotionstationcompose.ui.theme.localSpacing
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    uiState: HomeScreenUiState,
+    onDropdownAction: () -> Unit,
+    onChildSelectedAction: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = { Text("Home screen") },
             )
         }
     ) { paddingValues ->
-        Box(
-            contentAlignment = Alignment.Center,
-
-            modifier = modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+        Column(
+            verticalArrangement = Arrangement.spacedBy(localSpacing.current.small),
+            modifier = modifier.padding(paddingValues)
         ) {
-            Text(text = "Home Screen Under Construction")
+            ChildDropdown(uiState.childDropdownUiState, onDropdownAction, onChildSelectedAction)
+            EmotionStationCard(
+                label = "Hapi",
+                containerColor = Color.Cyan,
+                onAction = {},
+            )
+            EmotionStationCard(
+                label = "Sad",
+                containerColor = Color.Magenta,
+                onAction = {},
+            )
+            EmotionStationCard(
+                label = "temp",
+                containerColor = Color.Yellow,
+                onAction = {},
+            )
+            EmotionStationCard(
+                label = "erhh",
+                containerColor = Color.Green,
+                onAction = {},
+            )
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    val viewModel = koinViewModel<HomeScreenViewModel>()
+    val state = viewModel.uiState.collectAsState().value
+
+    HomeScreen(
+        uiState = state,
+        onDropdownAction = {},
+        onChildSelectedAction = {},
+    )
 }

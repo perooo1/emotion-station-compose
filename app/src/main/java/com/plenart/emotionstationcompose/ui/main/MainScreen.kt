@@ -37,6 +37,7 @@ import com.plenart.emotionstationcompose.ui.childDetails.ChildDetailsViewModel
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreenViewModel
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
+import com.plenart.emotionstationcompose.ui.home.HomeScreenViewModel
 import com.plenart.emotionstationcompose.ui.info.InfoScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreenViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -141,7 +142,16 @@ fun MainScreen() {
                     )
                 }
                 composable(ESRoute.HomeScreen.route) {
-                    HomeScreen()
+                    val viewModel = koinViewModel<HomeScreenViewModel>()
+                    val state = viewModel.uiState.collectAsState()
+
+                    HomeScreen(
+                        uiState = state.value,
+                        onDropdownAction = {
+                            viewModel.onDropdownAction(state.value)
+                        },
+                        onChildSelectedAction = {},
+                    )
                 }
                 composable(ESRoute.ChildrenScreen.route) {
                     val viewModel = koinViewModel<ChildrenScreenViewModel>()
