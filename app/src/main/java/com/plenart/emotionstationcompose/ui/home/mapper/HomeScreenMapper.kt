@@ -9,5 +9,6 @@ interface HomeScreenMapper {
         children: List<Child>
     ): HomeScreenUiState
 
-    fun toggleChildDropdown(currentState: HomeScreenUiState) : HomeScreenUiState
+    fun toggleChildDropdown(currentState: HomeScreenUiState): HomeScreenUiState
+    fun selectChild(currentState: HomeScreenUiState, child: Child): HomeScreenUiState
 }

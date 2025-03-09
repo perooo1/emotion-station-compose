@@ -12,9 +12,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.plenart.emotionstationcompose.ui.children.ChildrenScreenViewModel
+import com.plenart.emotionstationcompose.model.Child
 import com.plenart.emotionstationcompose.ui.home.components.ChildDropdown
-import com.plenart.emotionstationcompose.ui.home.components.ChildDropdownUiState
 import com.plenart.emotionstationcompose.ui.home.components.EmotionStationCard
 import com.plenart.emotionstationcompose.ui.theme.localSpacing
 import org.koin.androidx.compose.koinViewModel
@@ -24,7 +23,8 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     uiState: HomeScreenUiState,
     onDropdownAction: () -> Unit,
-    onChildSelectedAction: (String) -> Unit,
+    onChildSelectedAction: (Child) -> Unit,
+    onEmotionStationAction: (childId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -42,7 +42,9 @@ fun HomeScreen(
             EmotionStationCard(
                 label = "Hapi",
                 containerColor = Color.Cyan,
-                onAction = {},
+                onAction = {
+                    onEmotionStationAction(uiState.childDropdownUiState.selectedChild?.id ?: "emptyy")
+                },
             )
             EmotionStationCard(
                 label = "Sad",
@@ -73,5 +75,6 @@ fun HomeScreenPreview() {
         uiState = state,
         onDropdownAction = {},
         onChildSelectedAction = {},
+        onEmotionStationAction = {}
     )
 }

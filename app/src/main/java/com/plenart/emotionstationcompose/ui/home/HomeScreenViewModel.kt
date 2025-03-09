@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plenart.emotionstationcompose.data.authentication.AuthenticationRepository
 import com.plenart.emotionstationcompose.data.database.RemoteDatabaseRepository
+import com.plenart.emotionstationcompose.model.Child
 import com.plenart.emotionstationcompose.model.Parent
 import com.plenart.emotionstationcompose.ui.home.components.ChildDropdownUiState
 import com.plenart.emotionstationcompose.ui.home.mapper.HomeScreenMapper
@@ -56,5 +57,11 @@ class HomeScreenViewModel(
         _uiState.update {
             homeScreenMapper.toggleChildDropdown(homeScreenUiState);
         }
+    }
+
+    fun onChildSelectedAction(child: Child) {
+       _uiState.update {
+           homeScreenMapper.selectChild(_uiState.value, child)
+       }
     }
 }

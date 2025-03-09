@@ -11,12 +11,27 @@ class HomeScreenMapperImpl : HomeScreenMapper {
     ): HomeScreenUiState {
         return HomeScreenUiState(
             isCurrentUserSpecialist = isCurrentUserSpecialist,
-            childDropdownUiState = ChildDropdownUiState(options = children.map { child -> child.fullName })
+            childDropdownUiState = ChildDropdownUiState(
+                children = children,
+                selectedChild = children.firstOrNull(),
+            )
         )
     }
 
     override fun toggleChildDropdown(currentState: HomeScreenUiState): HomeScreenUiState {
-        return currentState.copy(childDropdownUiState = currentState.childDropdownUiState.copy(isExpanded = !currentState.childDropdownUiState.isExpanded))
+        return currentState.copy(
+            childDropdownUiState = currentState.childDropdownUiState.copy(
+                isExpanded = !currentState.childDropdownUiState.isExpanded
+            )
+        )
     }
 
+    override fun selectChild(currentState: HomeScreenUiState, child: Child): HomeScreenUiState {
+        return currentState.copy(
+            childDropdownUiState = currentState.childDropdownUiState.copy(
+                selectedChild = child,
+                isExpanded = false,
+            )
+        )
+    }
 }

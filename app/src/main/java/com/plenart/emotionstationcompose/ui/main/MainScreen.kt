@@ -25,9 +25,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.plenart.emotionstationcompose.data.authentication.AuthenticationRepository
+import com.plenart.emotionstationcompose.navigation.CHILD_ID
 import com.plenart.emotionstationcompose.navigation.CHILD_ID_KEY
 import com.plenart.emotionstationcompose.navigation.ChildDetailsDestination
 import com.plenart.emotionstationcompose.navigation.ESRoute
+import com.plenart.emotionstationcompose.navigation.EmotionStationActivityDestination
+import com.plenart.emotionstationcompose.ui.activity.EmotionStationActivityScreen
+import com.plenart.emotionstationcompose.ui.activity.EmotionStationActivityViewModel
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInScreen
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInViewModel
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpScreen
@@ -150,7 +154,10 @@ fun MainScreen() {
                         onDropdownAction = {
                             viewModel.onDropdownAction(state.value)
                         },
-                        onChildSelectedAction = {},
+                        onChildSelectedAction = viewModel::onChildSelectedAction,
+                        onEmotionStationAction = {
+                            navController.navigate(EmotionStationActivityDestination.createNavigationRoute(it))
+                        }
                     )
                 }
                 composable(ESRoute.ChildrenScreen.route) {
@@ -201,6 +208,18 @@ fun MainScreen() {
                         },
                         onFABAction = {},
                     )
+                }
+                composable(route = EmotionStationActivityDestination.route,
+                    arguments = listOf(navArgument(CHILD_ID){type = NavType.StringType})
+                    ) {
+                    val childId = it.arguments?.getString(CHILD_ID)
+
+                    val viewModel = koinViewModel<EmotionStationActivityViewModel>(
+                        parameters = { parametersOf(childId)}
+                    )
+                    val state = viewModel.uiState.collectAsState()
+
+                    EmotionStationActivityScreen(selectedChildId = state.value.selectedChildId)
                 }
             }
         }
