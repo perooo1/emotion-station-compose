@@ -57,13 +57,13 @@ fun MainScreen() {
         derivedStateOf {
             when (navBackStackEntry?.destination?.route) {
                 ESRoute.SignInScreen.route,
-                ESRoute.SignUpScreen.route -> false
+                ESRoute.SignUpScreen.route,
+                EmotionStationActivityDestination.route -> false
 
                 else -> true
             }
         }
     }
-
     Scaffold(
         bottomBar = {
             if (showBottomNavigation) {
@@ -120,7 +120,6 @@ fun MainScreen() {
                         onEmailChange = viewModel::onEmailChange,
                         onNavigateToSignUpScreen = { navController.navigate(ESRoute.SignUpScreen.route) },
                     )
-
                 }
                 composable(ESRoute.SignUpScreen.route)
                 {
@@ -156,7 +155,11 @@ fun MainScreen() {
                         },
                         onChildSelectedAction = viewModel::onChildSelectedAction,
                         onEmotionStationAction = {
-                            navController.navigate(EmotionStationActivityDestination.createNavigationRoute(it))
+                            navController.navigate(
+                                EmotionStationActivityDestination.createNavigationRoute(
+                                    it
+                                )
+                            )
                         }
                     )
                 }
@@ -209,17 +212,21 @@ fun MainScreen() {
                         onFABAction = {},
                     )
                 }
-                composable(route = EmotionStationActivityDestination.route,
-                    arguments = listOf(navArgument(CHILD_ID){type = NavType.StringType})
-                    ) {
+                composable(
+                    route = EmotionStationActivityDestination.route,
+                    arguments = listOf(navArgument(CHILD_ID) { type = NavType.StringType })
+                ) {
                     val childId = it.arguments?.getString(CHILD_ID)
 
                     val viewModel = koinViewModel<EmotionStationActivityViewModel>(
-                        parameters = { parametersOf(childId)}
+                        parameters = { parametersOf(childId) }
                     )
                     val state = viewModel.uiState.collectAsState()
 
-                    EmotionStationActivityScreen(selectedChildId = state.value.selectedChildId)
+                    EmotionStationActivityScreen(
+                        selectedChildId = state.value.selectedChildId,
+                        imageUrl = state.value.imageUrl
+                    )
                 }
             }
         }
@@ -247,7 +254,7 @@ fun BottomNavigationBar(
                 icon = {
                     Icon(
                         imageVector =
-                        if (selected) dest.iconSelected!! else dest.iconUnselected!!,
+                            if (selected) dest.iconSelected!! else dest.iconUnselected!!,
                         contentDescription = null
                     )
                 },

@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import authenticationModule
 import com.plenart.emotionstationcompose.data.di.databaseModule
+import com.plenart.emotionstationcompose.data.di.storageModule
 import com.plenart.emotionstationcompose.ui.activity.di.emotionStationActivityModule
 import com.plenart.emotionstationcompose.ui.authentication.signIn.di.signInModule
 import com.plenart.emotionstationcompose.ui.authentication.signUp.di.signUpModule
@@ -32,6 +33,7 @@ class EmotionStationComposeApp : Application() {
                 infoScreenModule,
                 signInModule,
                 signUpModule,
+                storageModule,
             )
         }
         Log.d("EmotionStationComposeApp", "App started")

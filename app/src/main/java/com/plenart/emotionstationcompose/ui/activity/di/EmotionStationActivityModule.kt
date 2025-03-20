@@ -7,7 +7,8 @@ import org.koin.dsl.module
 val emotionStationActivityModule = module {
     viewModel { params ->
         EmotionStationActivityViewModel(
-            selectedChildId = params.get()
+            selectedChildId = params.get(),
+            storageRepository = get(),
         )
     }
 }
