@@ -7,4 +7,9 @@ interface RemoteStorageRepository {
     val fearStorage: StorageReference
     val happinessStorage: StorageReference
     val sadnessStorage: StorageReference
+
+    suspend fun getRandomHappinessImage() : String
+    suspend fun getRandomSadnessImage() : String
+    suspend fun getRandomAngerImage() : String
+    suspend fun getRandomFearImage() : String
 }

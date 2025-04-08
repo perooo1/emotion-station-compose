@@ -224,8 +224,7 @@ fun MainScreen() {
                     val state = viewModel.uiState.collectAsState()
 
                     EmotionStationActivityScreen(
-                        selectedChildId = state.value.selectedChildId,
-                        imageUrl = state.value.imageUrl
+                        state = state.value,
                     )
                 }
             }

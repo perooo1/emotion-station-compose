@@ -1,6 +1,8 @@
 package com.plenart.emotionstationcompose.ui.activity.di
 
 import com.plenart.emotionstationcompose.ui.activity.EmotionStationActivityViewModel
+import com.plenart.emotionstationcompose.ui.activity.mapper.EmotionStationActivityMapper
+import com.plenart.emotionstationcompose.ui.activity.mapper.EmotionStationActivityMapperImpl
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -9,6 +11,9 @@ val emotionStationActivityModule = module {
         EmotionStationActivityViewModel(
             selectedChildId = params.get(),
             storageRepository = get(),
+            questionRepository = get(),
+            mapper = get()
         )
     }
+    single<EmotionStationActivityMapper> { EmotionStationActivityMapperImpl() }
 }

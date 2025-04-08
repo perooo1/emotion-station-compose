@@ -27,11 +27,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 
 @Composable
-fun AutoAdvancePager(pageItems: List<Color>, modifier: Modifier = Modifier) {
-    val pagerState = rememberPagerState(pageCount = { pageItems.size })
+fun AutoAdvancePager(
+    questions: List<QuestionUiState>,
+    modifier: Modifier = Modifier,
+) {
+    val pagerState = rememberPagerState(pageCount = { questions.size })
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -42,14 +46,18 @@ fun AutoAdvancePager(pageItems: List<Color>, modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxSize(),
                 userScrollEnabled = false,
             ) { page ->
-                Text(
-                    text = "Page: $page",
-                    textAlign = TextAlign.Center,
-                    modifier = modifier
-                        .fillMaxSize()
-                        .background(pageItems[page])
-                        .wrapContentSize(align = Alignment.Center)
-                )
+
+                Column {
+                    Text(questions[page].text)
+                    if (questions[page].imageUrl != null) {
+                        AsyncImage(
+                            model = questions[page].imageUrl,
+                            contentDescription = "Image"
+                        )
+                    }
+                    Text(questions[page].storyText)
+                    Text(questions[page].options.toString())
+                }
             }
         }
 
@@ -63,45 +71,30 @@ fun AutoAdvancePager(pageItems: List<Color>, modifier: Modifier = Modifier) {
         ) {
             TextButton(onClick = {
                 coroutineScope.launch {
-                    if(pagerState.currentPage > 0){
+                    if (pagerState.currentPage > 0) {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
                 }
             }) { Text("back") }
-            PagerIndicator(pageItems.size, pagerState.currentPage)
+            PagerIndicator(questions.size, pagerState.currentPage)
             ElevatedButton(onClick = {
                 coroutineScope.launch {
-                    if(pagerState.currentPage < pageItems.size - 1){
+                    if (pagerState.currentPage < questions.size - 1) {
                         pagerState.animateScrollToPage(pagerState.currentPage + 1)
                     }
                 }
             }) { Text("forward") }
         }
     }
-
 }
 
 
 @Composable
 fun EmotionStationActivityScreen(
-    imageUrl: String,
-    selectedChildId: String,
-    modifier: Modifier = Modifier
+    state: EmotionStationActivityUiState,
+    modifier: Modifier = Modifier,
 ) {
-    AutoAdvancePager(pageItems = listOf(Color.Black, Color.White, Color.Blue))
-
-    /*
-     Box(
-         contentAlignment = Alignment.Center,
-         modifier = Modifier.fillMaxSize()
-     ) {
-             AsyncImage(
-                 model = imageUrl,
-                 contentDescription = "Image"
-             )
-
-     }
-     */
+    AutoAdvancePager(questions = state.questions, modifier = modifier)
 }
 
 @Composable
