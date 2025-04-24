@@ -225,6 +225,13 @@ fun MainScreen() {
 
                     EmotionStationActivityScreen(
                         state = state.value,
+                        onQuestionVisible = viewModel::onQuestionVisible,
+                        onOptionSelected = viewModel::onOptionSelected,
+                        recordActivity = viewModel::recordActivity,
+                        onActivityCompletedDialogDismiss = {
+                            navController.popBackStack()
+                        }
+
                     )
                 }
             }

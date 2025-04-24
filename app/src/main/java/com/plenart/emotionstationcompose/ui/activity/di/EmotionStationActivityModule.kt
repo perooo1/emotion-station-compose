@@ -10,6 +10,7 @@ val emotionStationActivityModule = module {
     viewModel { params ->
         EmotionStationActivityViewModel(
             selectedChildId = params.get(),
+            databaseRepository = get(),
             storageRepository = get(),
             questionRepository = get(),
             mapper = get()

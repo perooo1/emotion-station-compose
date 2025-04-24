@@ -58,4 +58,8 @@
     <string name="child_attends_kindergarten">Attends kindergarten</string>
     <string name="child_risky_pregnancy">Risky pregnancy</string>
     <string name="child_pregnancy_birth_week">Pregnancy birth week</string>
+
+    <!--Activity screen -->
+    <string name="activity_completed_dialog_title">You reached emotion station!</string>
+    <string name="activity_completed_dialog_message">You finished your journey! You can now give back the phone to your parents</string>
 </resources>
