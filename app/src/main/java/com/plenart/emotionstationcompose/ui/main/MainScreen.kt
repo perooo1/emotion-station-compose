@@ -25,9 +25,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.plenart.emotionstationcompose.data.authentication.AuthenticationRepository
+import com.plenart.emotionstationcompose.navigation.CHILD_ID
 import com.plenart.emotionstationcompose.navigation.CHILD_ID_KEY
 import com.plenart.emotionstationcompose.navigation.ChildDetailsDestination
 import com.plenart.emotionstationcompose.navigation.ESRoute
+import com.plenart.emotionstationcompose.navigation.EmotionStationActivityDestination
+import com.plenart.emotionstationcompose.ui.activity.EmotionStationActivityScreen
+import com.plenart.emotionstationcompose.ui.activity.EmotionStationActivityViewModel
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInScreen
 import com.plenart.emotionstationcompose.ui.authentication.signIn.SignInViewModel
 import com.plenart.emotionstationcompose.ui.authentication.signUp.SignUpScreen
@@ -37,6 +41,7 @@ import com.plenart.emotionstationcompose.ui.childDetails.ChildDetailsViewModel
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreen
 import com.plenart.emotionstationcompose.ui.children.ChildrenScreenViewModel
 import com.plenart.emotionstationcompose.ui.home.HomeScreen
+import com.plenart.emotionstationcompose.ui.home.HomeScreenViewModel
 import com.plenart.emotionstationcompose.ui.info.InfoScreen
 import com.plenart.emotionstationcompose.ui.info.InfoScreenViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -52,13 +57,13 @@ fun MainScreen() {
         derivedStateOf {
             when (navBackStackEntry?.destination?.route) {
                 ESRoute.SignInScreen.route,
-                ESRoute.SignUpScreen.route -> false
+                ESRoute.SignUpScreen.route,
+                EmotionStationActivityDestination.route -> false
 
                 else -> true
             }
         }
     }
-
     Scaffold(
         bottomBar = {
             if (showBottomNavigation) {
@@ -115,7 +120,6 @@ fun MainScreen() {
                         onEmailChange = viewModel::onEmailChange,
                         onNavigateToSignUpScreen = { navController.navigate(ESRoute.SignUpScreen.route) },
                     )
-
                 }
                 composable(ESRoute.SignUpScreen.route)
                 {
@@ -141,7 +145,23 @@ fun MainScreen() {
                     )
                 }
                 composable(ESRoute.HomeScreen.route) {
-                    HomeScreen()
+                    val viewModel = koinViewModel<HomeScreenViewModel>()
+                    val state = viewModel.uiState.collectAsState()
+
+                    HomeScreen(
+                        uiState = state.value,
+                        onDropdownAction = {
+                            viewModel.onDropdownAction(state.value)
+                        },
+                        onChildSelectedAction = viewModel::onChildSelectedAction,
+                        onEmotionStationAction = {
+                            navController.navigate(
+                                EmotionStationActivityDestination.createNavigationRoute(
+                                    it
+                                )
+                            )
+                        }
+                    )
                 }
                 composable(ESRoute.ChildrenScreen.route) {
                     val viewModel = koinViewModel<ChildrenScreenViewModel>()
@@ -192,6 +212,28 @@ fun MainScreen() {
                         onFABAction = {},
                     )
                 }
+                composable(
+                    route = EmotionStationActivityDestination.route,
+                    arguments = listOf(navArgument(CHILD_ID) { type = NavType.StringType })
+                ) {
+                    val childId = it.arguments?.getString(CHILD_ID)
+
+                    val viewModel = koinViewModel<EmotionStationActivityViewModel>(
+                        parameters = { parametersOf(childId) }
+                    )
+                    val state = viewModel.uiState.collectAsState()
+
+                    EmotionStationActivityScreen(
+                        state = state.value,
+                        onQuestionVisible = viewModel::onQuestionVisible,
+                        onOptionSelected = viewModel::onOptionSelected,
+                        recordActivity = viewModel::recordActivity,
+                        onActivityCompletedDialogDismiss = {
+                            navController.popBackStack()
+                        }
+
+                    )
+                }
             }
         }
     }
@@ -218,7 +260,7 @@ fun BottomNavigationBar(
                 icon = {
                     Icon(
                         imageVector =
-                        if (selected) dest.iconSelected!! else dest.iconUnselected!!,
+                            if (selected) dest.iconSelected!! else dest.iconUnselected!!,
                         contentDescription = null
                     )
                 },

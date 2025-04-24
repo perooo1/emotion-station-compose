@@ -9,9 +9,11 @@ import com.plenart.emotionstationcompose.model.Child
 import com.plenart.emotionstationcompose.model.Parent
 import com.plenart.emotionstationcompose.model.Specialist
 import com.plenart.emotionstationcompose.model.User
+import com.plenart.emotionstationcompose.ui.activity.di.emotionStationActivityModule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
+import kotlinx.serialization.json.Json
 
 private const val FIRESTORE_COLLECTION_ACTIVITY_RECORDS = "ActivityRecords"
 private const val FIRESTORE_COLLECTION_PARENTS = "Parents"
@@ -23,7 +25,7 @@ private const val PARENT_ID = "parentId"
 private const val CHILD_ID = "childId"
 
 class RemoteDatabaseRepositoryImpl(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) : RemoteDatabaseRepository {
     override suspend fun getSpecialistFlow(specialistId: String?): Flow<Specialist?> =
         firestore.collection(FIRESTORE_COLLECTION_SPECIALISTS)
@@ -35,10 +37,10 @@ class RemoteDatabaseRepositoryImpl(
     override suspend fun getRecordedActivities(childId: String): Flow<List<ActivityRecord>> {
         return firestore.collection(FIRESTORE_COLLECTION_ACTIVITY_RECORDS)
             .whereEqualTo(CHILD_ID, childId).snapshots().map {
-            it.documents.mapNotNull { document ->
-                document.toObject(ActivityRecord::class.java)
+                it.documents.mapNotNull { document ->
+                    document.toObject(ActivityRecord::class.java)
+                }
             }
-        }
     }
 
     override suspend fun getChildrenFlow(
@@ -129,6 +131,19 @@ class RemoteDatabaseRepositoryImpl(
                 .await()
         } catch (e: FirebaseException) {
             e.printStackTrace()
+        }
+    }
+
+    override suspend fun recordCompletedActivity(activityRecord: ActivityRecord): Boolean {
+        try {
+            firestore.collection(FIRESTORE_COLLECTION_ACTIVITY_RECORDS)
+                .document("TEST-COMPOSE${activityRecord.emotionStation?.activityType?.name}-${activityRecord.childId}-${activityRecord.timeOfActivity}")
+                .set(activityRecord, SetOptions.merge())
+
+            return true
+        } catch (e: FirebaseException) {
+            e.printStackTrace()
+            return false
         }
     }
 }

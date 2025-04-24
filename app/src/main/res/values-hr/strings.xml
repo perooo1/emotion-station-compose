@@ -57,4 +57,8 @@
     <string name="child_attends_kindergarten">Pohađa vrtić</string>
     <string name="child_risky_pregnancy">Rizična trudnoća</string>
     <string name="child_pregnancy_birth_week">Tjedan trudnoće u kojem je dijete rođeno</string>
+
+    <!--Activity screen -->
+    <string name="activity_completed_dialog_title">Tvoje putovanje je uspješno završeno, stigao si na stanicu!</string>
+    <string name="activity_completed_dialog_message">Sada možeš vratiti mobitel roditeljima!</string>
 </resources>
